@@ -1,4 +1,4 @@
-package repository
+package repositorys
 
 import (
 	pgadapter "github.com/casbin/casbin-pg-adapter"
@@ -19,6 +19,6 @@ func (repo *casbinPostgressRepository) GetTheAdapter() (persist.BatchAdapter, er
 
 func NewCasbinPostgressRepository() ICasbinRepository {
 	return &casbinPostgressRepository{
-		connectionString: "postgresql://username:password@postgres:5432/database?sslmode=disable",
+		connectionString: "postgresql://postgres:admin@localhost:5432/database?sslmode=disable",
 	}
 }
