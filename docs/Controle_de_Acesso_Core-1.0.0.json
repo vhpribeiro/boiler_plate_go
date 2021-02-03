@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "This is an API for Main Access Control Project. This project is an adapter for casbin () a lib in go that helps us to work with domain RBAC. In these projects, we have three main concepts - users, policies and roles. Policies are rules that say that a role in a domain can take action on a resource.",
+    "description": "This is an API for Main Access Control Project. This project is an adapter for casbin (https://casbin.org/en/) a lib in go that helps us to work with domain RBAC. In these projects, we have three main concepts - users, policies and roles. Policies are rules that say that a role in a domain can take action on a resource.",
     "version": "1.0.0",
     "title": "Controle de Acesso Core API"
   },
