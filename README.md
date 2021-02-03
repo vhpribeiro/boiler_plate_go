@@ -19,7 +19,9 @@ Para podermos executar o projeto precisamos instalar alguns programas em nossa m
 Inicialmente precisamos clonar o projeto da seguinte maneira:
 
 `1. git clone https://github.com/vhpribeiro/controle_acesso_core.git`
+
 `2. cd controle_acesso_core`
+
 `3. cd src`
 
 Após clonar de o seguinte comando:
@@ -45,4 +47,3 @@ ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8000
 ```
-
