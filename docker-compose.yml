@@ -12,7 +12,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - postgres
+      - controle_acesso
     restart: unless-stopped
 
   pgadmin:
@@ -26,20 +26,18 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
-      - postgres
+      - controle_acesso
     restart: unless-stopped
 
   controle_de_acesso_core:
     build:
       context: .
-      dockerfile: ./src/Dockerfile
-    image: golang
     ports:
-      - "8080:8080"
+      - "8000:8000"
     hostname: controle_de_acesso_core
 
 networks:
-  postgres:
+  controle_acesso:
     driver: bridge
 
 volumes:
