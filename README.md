@@ -1,4 +1,4 @@
-<h1 align="center"> Controle de Acesso </h1>
+<h1 align="center"> Controle de Acesso Core </h1>
 
 ## Descrição do Projeto
 
@@ -14,7 +14,7 @@ Para podermos executar o projeto precisamos instalar alguns programas em nossa m
 
 - PostgreSQL é sistema gerenciador de banco de dados objeto relacional, desenvolvido como projeto de código aberto. [Download PostgreSQL](https://www.postgresql.org/download/)
 
-## Como Instalar
+## Como executar o projeto
 
 Inicialmente precisamos clonar o projeto da seguinte maneira:
 
@@ -24,7 +24,7 @@ Inicialmente precisamos clonar o projeto da seguinte maneira:
 
 `3. cd src`
 
-Após clonar de o seguinte comando:
+Após clonar o projeto, execute o seguinte comando
 
 `4. go get -u`
 
