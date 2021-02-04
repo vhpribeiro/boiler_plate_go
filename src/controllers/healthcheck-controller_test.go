@@ -10,7 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestHealthCheckEndpoint(t *testing.T) {
+func TestShouldGetSuccessWhenTryHealthCheck(t *testing.T) {
+	//Arrange
 	var result string
 	url := "/healthcheck"
 	mensagemEsperada := "Aplicação disponível"
@@ -20,8 +21,10 @@ func TestHealthCheckEndpoint(t *testing.T) {
 	c := e.NewContext(req, rec)
 	healthCheckController := NewHealtCheckController()
 
+	//Action
 	healthCheckController.GetHealthCheck(c)
 
+	//Assert
 	_ = json.Unmarshal(rec.Body.Bytes(), &result)
 	assert.Equal(t, mensagemEsperada, result)
 	assert.Equal(t, http.StatusOK, rec.Code)

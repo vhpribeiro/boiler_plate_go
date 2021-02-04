@@ -20,25 +20,19 @@ type policyController struct {
 
 func (p *policyController) AddPolicy(context echo.Context) error {
 	var policyDto dtos.PolicyDto
-	responseWriter := context.Response().Writer
 	body := context.Request().Body
 	err := json.NewDecoder(body).Decode(&policyDto)
 
-	if err != nil {
-		responseWriter.WriteHeader(http.StatusInternalServerError)
-		return err
+	if err != nil || policyDto.Role == "" || policyDto.Action == "" || policyDto.Domain == "" || policyDto.Resource == "" {
+		return context.JSON(http.StatusBadRequest, errors.Error{Message: "Invalid object"})
 	}
 
 	result, err := p.policyService.AddPolicy(policyDto)
-	if err != nil {
-		return err
+	if err != nil || result == false {
+		return context.JSON(http.StatusInternalServerError, errors.Error{Message: "This policy could not be created"})
 	}
 
-	if result {
-		return context.JSON(http.StatusOK, policyDto)
-	}
-
-	return context.JSON(http.StatusInternalServerError, errors.Error{Message: "Não foi possível adicionar a política"})
+	return context.JSON(http.StatusCreated, policyDto)
 }
 
 func NewPolicyController(service services.IPolicyService) IPolicyController {
