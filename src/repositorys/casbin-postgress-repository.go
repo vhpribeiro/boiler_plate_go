@@ -1,24 +1,30 @@
 package repositorys
 
 import (
+	"controle_acesso_core.com/src/utils"
 	pgadapter "github.com/casbin/casbin-pg-adapter"
 	"github.com/casbin/casbin/v2/persist"
 )
 
 type casbinPostgressRepository struct {
-	connectionString string
+	envLoader utils.IEnvLoader
 }
 
 func (repo *casbinPostgressRepository) GetTheAdapter() (persist.BatchAdapter, error) {
-	adapter, err := pgadapter.NewAdapter(repo.connectionString)
+	connectionString, err := repo.envLoader.GetTheEnvVariable("CONNECTION_STRING")
+	if err != nil {
+		return nil, err
+	}
+
+	adapter, err := pgadapter.NewAdapter(connectionString)
 	if err != nil {
 		return nil, err
 	}
 	return adapter, nil
 }
 
-func NewCasbinPostgressRepository() ICasbinRepository {
+func NewCasbinPostgressRepository(envLoader utils.IEnvLoader) ICasbinRepository {
 	return &casbinPostgressRepository{
-		connectionString: "postgresql://postgres:admin@localhost:5432/database?sslmode=disable",
+		envLoader: envLoader,
 	}
 }

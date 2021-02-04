@@ -5,28 +5,26 @@ import (
 	http_adapter "controle_acesso_core.com/src/http"
 	"controle_acesso_core.com/src/repositorys"
 	"controle_acesso_core.com/src/services"
+	"controle_acesso_core.com/src/utils"
 )
 
 func main() {
+	//Instanciar utils
+	envLoader := utils.NewEnvLoader()
+
 	//Instanciar os repositorys
-	casbinRepository := repositorys.NewCasbinPostgressRepository()
+	casbinRepository := repositorys.NewCasbinPostgressRepository(envLoader)
 
 	//Instanciar os serviços
-	userService, err := services.NewUserService(casbinRepository)
-	if err != nil {
-		panic(err)
-	}
 	policyService, err := services.NewPolicyService(casbinRepository)
 	if err != nil {
 		panic(err)
 	}
 
-	//Instanciar as controller
-	userController := controllers.NewUserController(userService)
 	policyController := controllers.NewPolicyController(policyService)
 	healthCheckController := controllers.NewHealtCheckController()
 
-	handler := http_adapter.NewHandler(healthCheckController, userController, policyController)
+	handler := http_adapter.NewHandler(healthCheckController, policyController, envLoader)
 
 	err = handler.Start()
 	if err != nil {

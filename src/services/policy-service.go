@@ -26,7 +26,7 @@ func NewPolicyService(casbinRepository repositorys.ICasbinRepository) (IPolicySe
 		return nil, err
 	}
 
-	enforceConcrete, err := casbin.NewEnforcer("./configuration/casbin_rbac_with_domains_model.conf", casbinContext)
+	enforceConcrete, err := casbin.NewEnforcer("./configuration/casbin/casbin_rbac_with_domains_model.conf", casbinContext)
 	if err != nil {
 		return nil, err
 	}
