@@ -24,7 +24,7 @@ Inicialmente precisamos clonar o projeto da seguinte maneira:
 
 `3. cd src`
 
-Após clonar o projeto, execute o seguinte comando
+Após clonar o projeto, execute o seguinte comando:
 
 `4. go get -u`
 
