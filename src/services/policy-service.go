@@ -1,39 +1,21 @@
 package services
 
-import (
-	"controle_acesso_core.com/src/repositorys"
-	"github.com/casbin/casbin/v2"
-	"github.com/casbin/casbin/v2/persist"
-)
+import "controle_acesso_core.com/src/services/dtos"
 
 type IPolicyService interface {
-	AddPolicy(role string, domain string, resource string, action string) (bool, error)
+	AddPolicy(policyDto dtos.PolicyDto) (bool, error)
 }
 
 type policyService struct {
-	casbinRepo           repositorys.ICasbinRepository
-	casbinMongoDbAdapter persist.BatchAdapter
-	enforce              *casbin.Enforcer
+	casbinAdapter ICasbinAdapterService
 }
 
-func (p *policyService) AddPolicy(role string, domain string, resource string, action string) (bool, error) {
-	return p.enforce.AddPolicy(role, domain, resource, action)
+func (p *policyService) AddPolicy(policyDto dtos.PolicyDto) (bool, error) {
+	return p.casbinAdapter.AddPolicy(policyDto.Role, policyDto.Domain, policyDto.Resource, policyDto.Action)
 }
 
-func NewPolicyService(casbinRepository repositorys.ICasbinRepository) (IPolicyService, error) {
-	casbinContext, err := casbinRepository.GetTheAdapter()
-	if err != nil {
-		return nil, err
-	}
-
-	enforceConcrete, err := casbin.NewEnforcer("./configuration/casbin/casbin_rbac_with_domains_model.conf", casbinContext)
-	if err != nil {
-		return nil, err
-	}
-
+func NewPolicyService(casbinAdapter ICasbinAdapterService) (IPolicyService, error) {
 	return &policyService{
-		casbinRepo:           casbinRepository,
-		casbinMongoDbAdapter: casbinContext,
-		enforce:              enforceConcrete,
+		casbinAdapter: casbinAdapter,
 	}, nil
 }

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"controle_acesso_core.com/src/errors"
 	"controle_acesso_core.com/src/services"
 	"controle_acesso_core.com/src/services/dtos"
+	"controle_acesso_core.com/src/utils/errors"
 	"github.com/labstack/echo/v4"
 )
 
@@ -29,7 +29,7 @@ func (p *policyController) AddPolicy(context echo.Context) error {
 		return err
 	}
 
-	result, err := p.policyService.AddPolicy(policyDto.Role, policyDto.Domain, policyDto.Resource, policyDto.Action)
+	result, err := p.policyService.AddPolicy(policyDto)
 	if err != nil {
 		return err
 	}

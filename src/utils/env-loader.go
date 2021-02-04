@@ -15,7 +15,7 @@ type envLoader struct{}
 func (*envLoader) GetTheEnvVariable(key string) (string, error) {
 	err := godotenv.Load("./configuration/.env")
 	if err != nil {
-		return "", err
+		return "Erro", err
 	}
 
 	return os.Getenv(key), nil

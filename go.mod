@@ -7,4 +7,5 @@ require (
 	github.com/casbin/casbin/v2 v2.23.0
 	github.com/joho/godotenv v1.3.0
 	github.com/labstack/echo/v4 v4.1.17
+	github.com/stretchr/testify v1.7.0
 )

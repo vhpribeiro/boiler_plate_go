@@ -16,7 +16,11 @@ func main() {
 	casbinRepository := repositorys.NewCasbinPostgressRepository(envLoader)
 
 	//Instanciar os serviços
-	policyService, err := services.NewPolicyService(casbinRepository)
+	casbinAdapterService, err := services.NewCasbinAdapterService(casbinRepository)
+	if err != nil {
+		panic(err)
+	}
+	policyService, err := services.NewPolicyService(casbinAdapterService)
 	if err != nil {
 		panic(err)
 	}
