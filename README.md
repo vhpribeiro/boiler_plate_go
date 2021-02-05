@@ -1,1 +1,65 @@
-# controle_acesso_core
+<h1 align="center"> Controle de Acesso Core </h1>
+
+## Descrição do Projeto
+
+<p align="justify"> Projeto responsável por cuidar da parte de autorização dos sistemas Ambev. </p>
+
+## Para Começar
+
+Para podermos executar o projeto precisamos instalar alguns programas em nossa máquina para que tudo funcione perfeitamente.
+
+- Visual Studio Code(vscode) é um editor de código-fonte desenvolvido pela Microsoft que você poderá usar para editar e subir seu código. [Download Visual Studio Code](https://code.visualstudio.com/download)
+
+- Go(Golang) é uma linguagem de programação de código aberto que facilita a construção de software simples, confiável e eficiente. [Download Golang](https://golang.org/doc/install#download)
+
+- PostgreSQL é sistema gerenciador de banco de dados objeto relacional, desenvolvido como projeto de código aberto. [Download PostgreSQL](https://www.postgresql.org/download/)
+
+- Docker Docker é uma plataforma aberta para desenvolvimento, envio e execução de aplicativos. O Docker permite que você separe seus aplicativos de sua infraestrutura para que possa entregar o software rapidamente. [Downalod Docker](https://docs.docker.com/get-docker/)
+
+## Como executar o projeto
+
+Inicialmente precisamos clonar o projeto da seguinte maneira:
+
+`1. git clone https://github.com/vhpribeiro/controle_acesso_core.git`
+
+`2. cd controle_acesso_core`
+
+`3. cd src`
+
+Após clonar o projeto, execute o seguinte comando:
+
+`4. go get -u`
+
+Isso irá baixar e instalar todas as dependências do projeto.
+
+Para executar o projeto, basta executar o seguinte comando:
+
+`5. go run .`
+
+Você saberá quando o projeto estiver rodando quando aparecer a seguinte mensagem em seu Cmd:
+
+```
+   ____    __
+  / __/___/ /  ___
+ / _// __/ _ \/ _ \
+/___/\__/_//_/\___/ v4.1.17
+High performance, minimalist Go web framework
+https://echo.labstack.com
+____________________________________O/_______
+                                    O\
+⇨ http server started on [::]:8000
+```
+
+## Executar com Docker
+
+Para rodar a aplicação com Docker você precisa estar na pasta raiz no projeto, e rodar o seguinte comando:
+
+`docker-compose up`
+
+Após aplicar esse comando em algum Cmd, ele irá subir todas as imagens que estão dentro dele.
+
+Caso queira acabar com o funcionamento use `CTRL + C` no Cmd que estiver usando e depois use o comando:
+
+`docker-compose down`
+
+Esse comando fara que suas imagens que estavam rodando parem de rodar.
