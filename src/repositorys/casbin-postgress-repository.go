@@ -9,7 +9,6 @@ import (
 type casbinPostgressRepository struct{}
 
 func (repo *casbinPostgressRepository) GetTheAdapter() (persist.BatchAdapter, error) {
-
 	env := environments.GetEnvironment()
 
 	adapter, err := pgadapter.NewAdapter(env.ConnectionString)

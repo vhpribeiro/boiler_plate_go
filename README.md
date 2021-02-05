@@ -14,6 +14,8 @@ Para podermos executar o projeto precisamos instalar alguns programas em nossa m
 
 - PostgreSQL é sistema gerenciador de banco de dados objeto relacional, desenvolvido como projeto de código aberto. [Download PostgreSQL](https://www.postgresql.org/download/)
 
+- Docker Docker é uma plataforma aberta para desenvolvimento, envio e execução de aplicativos. O Docker permite que você separe seus aplicativos de sua infraestrutura para que possa entregar o software rapidamente. [Downalod Docker](https://docs.docker.com/get-docker/)
+
 ## Como executar o projeto
 
 Inicialmente precisamos clonar o projeto da seguinte maneira:
@@ -47,3 +49,22 @@ ____________________________________O/_______
                                     O\
 ⇨ http server started on [::]:8000
 ```
+
+## Executar com Docker
+
+Para rodar a aplicação com Docker você precisa estar na pasta raiz no projeto, e rodar o seguinte comando:
+
+`docker-compose up`
+
+Após aplicar esse comando em algum Cmd, ele irá subir todas as imagens que estão dentro dele.
+
+Ao rodar o Docker Compose, irão subir as seguintes imagens:
+ - Aplicação / Porta: 8000
+ - Postgres / Porta: 5432
+ - PgAdmin / Porta: 5050
+
+Caso queira acabar com o funcionamento use `CTRL + C` no Cmd que estiver usando e depois use o comando:
+
+`docker-compose down`
+
+Esse comando fara que suas imagens que estavam rodando parem de rodar.

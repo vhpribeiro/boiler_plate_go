@@ -1,0 +1,51 @@
+version: "3"
+services:
+  controle_de_acesso_core:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - CONNECTION_STRING=postgresql://postgres:admin@host.docker.internal:5432/database?sslmode=disable
+      - PATH_CONFIG=./casbin_rbac_with_domains_model.conf
+    hostname: controle_de_acesso_core
+    networks:
+      - controle_acesso
+    # depends_on:
+    #   - postgres-container
+
+  # postgres-container:
+  #   image: postgres
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER:-postgres}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+  #     PGDATA: /data/postgres
+  #   volumes:
+  #     - postgres:/data/postgres
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - controle_acesso
+  #   restart: unless-stopped
+
+  # pgadmin_container:
+  #   image: dpage/pgadmin4
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+  #     PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+  #   volumes:
+  #     - pgadmin:/root/.pgadmin
+  #   ports:
+  #     - "${PGADMIN_PORT:-5050}:80"
+  #   networks:
+  #     - controle_acesso
+  #   restart: unless-stopped
+
+networks:
+  controle_acesso:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:

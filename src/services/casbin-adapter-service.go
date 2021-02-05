@@ -1,6 +1,7 @@
 package services
 
 import (
+	"controle_acesso_core.com/src/configuration/environments"
 	"controle_acesso_core.com/src/repositorys"
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/persist"
@@ -21,12 +22,14 @@ func (c *casbinAdapterService) AddPolicy(role string, domain string, resource st
 }
 
 func NewCasbinAdapterService(casbinRepository repositorys.ICasbinRepository) (ICasbinAdapterService, error) {
+	env := environments.GetEnvironment()
+
 	casbinContext, err := casbinRepository.GetTheAdapter()
 	if err != nil {
 		return nil, err
 	}
 
-	enforceConcrete, err := casbin.NewEnforcer("./configuration/casbin/casbin_rbac_with_domains_model.conf", casbinContext)
+	enforceConcrete, err := casbin.NewEnforcer(env.PathConfig, casbinContext)
 	if err != nil {
 		return nil, err
 	}
