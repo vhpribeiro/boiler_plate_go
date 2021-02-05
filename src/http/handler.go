@@ -9,7 +9,6 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/qiangxue/go-env"
 )
 
 type IHandler interface {
@@ -24,10 +23,7 @@ type apiHandler struct {
 }
 
 func (handler *apiHandler) Start() error {
-	var cfg environments.Environment
-	if err := env.Load(&cfg); err != nil {
-		panic(err)
-	}
+	env := environments.GetEnvironment()
 
 	handler.echo.Use(middleware.Logger())
 	handler.echo.Use(middleware.Recover())
@@ -39,7 +35,7 @@ func (handler *apiHandler) Start() error {
 	policys := api.Group("/policies")
 	policys.POST("", handler.policys.AddPolicy)
 
-	return handler.echo.Start(fmt.Sprintf("%s:%s", "0.0.0.0", cfg.Port))
+	return handler.echo.Start(fmt.Sprintf("%s:%s", "0.0.0.0", env.Port))
 }
 
 func NewHandler(
