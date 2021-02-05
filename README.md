@@ -8,15 +8,25 @@
 
 Para podermos executar o projeto precisamos instalar alguns programas em nossa máquina para que tudo funcione perfeitamente.
 
-- Visual Studio Code(vscode) é um editor de código-fonte desenvolvido pela Microsoft que você poderá usar para editar e subir seu código. [Download Visual Studio Code](https://code.visualstudio.com/download)
+- **Visual Studio Code(vscode)** é um editor de código-fonte desenvolvido pela Microsoft que você poderá usar para editar e subir seu código. [Download Visual Studio Code](https://code.visualstudio.com/download)
 
-- Go(Golang) é uma linguagem de programação de código aberto que facilita a construção de software simples, confiável e eficiente. [Download Golang](https://golang.org/doc/install#download)
+- **Go(Golang)** é uma linguagem de programação de código aberto que facilita a construção de software simples, confiável e eficiente. [Download Golang](https://golang.org/doc/install#download)
 
-- PostgreSQL é sistema gerenciador de banco de dados objeto relacional, desenvolvido como projeto de código aberto. [Download PostgreSQL](https://www.postgresql.org/download/)
+- **PostgreSQL** é sistema gerenciador de banco de dados objeto relacional, desenvolvido como projeto de código aberto. [Download PostgreSQL](https://www.postgresql.org/download/)
 
-- Docker Docker é uma plataforma aberta para desenvolvimento, envio e execução de aplicativos. O Docker permite que você separe seus aplicativos de sua infraestrutura para que possa entregar o software rapidamente. [Downalod Docker](https://docs.docker.com/get-docker/)
+- **Docker** é uma plataforma aberta para desenvolvimento, envio e execução de aplicativos. O Docker permite que você separe seus aplicativos de sua infraestrutura para que possa entregar o software rapidamente. [Downalod Docker](https://docs.docker.com/get-docker/)
+
+## Variáveis de ambiente
+
+Todas variáveis de ambiente que o projeto estão dentro de **src/configuration/environments/environments.go** já com seus valores defaults configurados.
+
+As mesmas variáveis também se encontram configuradas no docker-compose do projeto.
 
 ## Como executar o projeto
+
+#### Executar toda aplicação localmente
+
+Para isso é necessário ter o postgres rodando localmente na porta 5432 (default).
 
 Inicialmente precisamos clonar o projeto da seguinte maneira:
 
@@ -50,7 +60,7 @@ ____________________________________O/_______
 ⇨ http server started on [::]:8000
 ```
 
-## Executar com Docker
+#### Executar com Docker
 
 Para rodar a aplicação com Docker você precisa estar na pasta raiz no projeto, e rodar o seguinte comando:
 
@@ -68,3 +78,5 @@ Caso queira acabar com o funcionamento use `CTRL + C` no Cmd que estiver usando 
 `docker-compose down`
 
 Esse comando fara que suas imagens que estavam rodando parem de rodar.
+
+Para visualizar os arquivos no pgAdmin de maneira mais rápido, fornecemos um backup prévio da aplicação que se encontra dentro da pasta **pgadmin**
