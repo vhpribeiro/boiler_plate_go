@@ -58,6 +58,11 @@ Para rodar a aplicação com Docker você precisa estar na pasta raiz no projeto
 
 Após aplicar esse comando em algum Cmd, ele irá subir todas as imagens que estão dentro dele.
 
+Ao rodar o Docker Compose, irão subir as seguintes imagens:
+ - Aplicação / Porta: 8000
+ - Postgres / Porta: 5432
+ - PgAdmin / Porta: 5050
+
 Caso queira acabar com o funcionamento use `CTRL + C` no Cmd que estiver usando e depois use o comando:
 
 `docker-compose down`

@@ -1,5 +1,14 @@
 version: "3"
 services:
+  controle_de_acesso_core:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    hostname: controle_de_acesso_core
+    depends_on:
+      - postgres
+
   postgres:
     container_name: postgres_container
     image: postgres
@@ -28,13 +37,6 @@ services:
     networks:
       - controle_acesso
     restart: unless-stopped
-
-  controle_de_acesso_core:
-    build:
-      context: .
-    ports:
-      - "8000:8000"
-    hostname: controle_de_acesso_core
 
 networks:
   controle_acesso:
