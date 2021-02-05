@@ -1,30 +1,28 @@
 package repositorys
 
 import (
-	"controle_acesso_core.com/src/utils"
+	"controle_acesso_core.com/src/configuration/environments"
 	pgadapter "github.com/casbin/casbin-pg-adapter"
 	"github.com/casbin/casbin/v2/persist"
+	"github.com/qiangxue/go-env"
 )
 
-type casbinPostgressRepository struct {
-	envLoader utils.IEnvLoader
-}
+type casbinPostgressRepository struct{}
 
 func (repo *casbinPostgressRepository) GetTheAdapter() (persist.BatchAdapter, error) {
-	connectionString, err := repo.envLoader.GetTheEnvVariable("CONNECTION_STRING")
-	if err != nil {
-		return nil, err
+
+	var cfg environments.Environment
+	if err := env.Load(&cfg); err != nil {
+		panic(err)
 	}
 
-	adapter, err := pgadapter.NewAdapter(connectionString)
+	adapter, err := pgadapter.NewAdapter(cfg.ConnectionString)
 	if err != nil {
 		return nil, err
 	}
 	return adapter, nil
 }
 
-func NewCasbinPostgressRepository(envLoader utils.IEnvLoader) ICasbinRepository {
-	return &casbinPostgressRepository{
-		envLoader: envLoader,
-	}
+func NewCasbinPostgressRepository() ICasbinRepository {
+	return &casbinPostgressRepository{}
 }

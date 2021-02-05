@@ -3,10 +3,13 @@ package http
 import (
 	"fmt"
 
+	"controle_acesso_core.com/src/configuration/environments"
 	"controle_acesso_core.com/src/controllers"
 	"controle_acesso_core.com/src/utils"
+
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/qiangxue/go-env"
 )
 
 type IHandler interface {
@@ -21,6 +24,11 @@ type apiHandler struct {
 }
 
 func (handler *apiHandler) Start() error {
+	var cfg environments.Environment
+	if err := env.Load(&cfg); err != nil {
+		panic(err)
+	}
+
 	handler.echo.Use(middleware.Logger())
 	handler.echo.Use(middleware.Recover())
 	api := handler.echo.Group("/api")
@@ -31,23 +39,16 @@ func (handler *apiHandler) Start() error {
 	policys := api.Group("/policies")
 	policys.POST("", handler.policys.AddPolicy)
 
-	port, err := handler.envLoader.GetTheEnvVariable("LOCAL_PORT")
-	if err != nil {
-		return err
-	}
-
-	return handler.echo.Start(fmt.Sprintf("%s:%s", "0.0.0.0", port))
+	return handler.echo.Start(fmt.Sprintf("%s:%s", "0.0.0.0", cfg.Port))
 }
 
 func NewHandler(
 	healthCheckController controllers.IHealthCheckController,
-	policyController controllers.IPolicyController,
-	envLoader utils.IEnvLoader) IHandler {
+	policyController controllers.IPolicyController) IHandler {
 	e := echo.New()
 	return &apiHandler{
 		echo:        e,
 		healthCheck: healthCheckController,
 		policys:     policyController,
-		envLoader:   envLoader,
 	}
 }
