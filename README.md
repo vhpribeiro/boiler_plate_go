@@ -79,4 +79,14 @@ Caso queira acabar com o funcionamento use `CTRL + C` no Cmd que estiver usando 
 
 Esse comando fara que suas imagens que estavam rodando parem de rodar.
 
-Para visualizar os arquivos no pgAdmin de maneira mais rápido, fornecemos um backup prévio da aplicação que se encontra dentro da pasta **pgadmin**
+###### Passo a passo para configurar database
+
+No pgAdmin, é necessário criar um Server com as seguintes configurações:
+ - General - Nome do Servidor: Postgres 13
+ - Connection - Host name/address: postgres-container
+ - Connection - Port - 5432
+ - Connection - Maintenance database - postgres
+ - Connection - Username - postgres
+ - Connection - Password - admin
+
+Feito isso, basta criar uma base com o nome **casbin** e a aplicação poderá ser executada
