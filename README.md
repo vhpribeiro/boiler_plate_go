@@ -28,7 +28,7 @@ As mesmas variáveis também se encontram configuradas no docker-compose do proj
 
 Inicialmente precisamos clonar o projeto da seguinte maneira:
 
-`1. git clone https://github.com/vhpribeiro/controle_acesso_core.git`
+`1. git clone https://github.com/vhpribeiro/boiler_plate_go`
 
 `2. cd boiler_plate_go`
 
@@ -87,4 +87,9 @@ No pgAdmin, é necessário criar um Server com as seguintes configurações:
  - Connection - Username - postgres
  - Connection - Password - admin
 
-Feito isso, basta criar uma base com o nome **casbin** e a aplicação poderá ser executada
+
+## Comando interessantes
+
+Para analisar a cobertura de código de todos os packages do projeto
+
+`go test ./... -coverprofile=cover.out && go tool cover -html=cover.out`
