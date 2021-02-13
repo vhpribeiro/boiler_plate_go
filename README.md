@@ -1,12 +1,12 @@
-<h1 align="center"> Controle de Acesso Core </h1>
+<h1 align="center"> Boiler Plate Go </h1>
 
 ## Descrição do Projeto
 
-<p align="justify"> Projeto responsável por cuidar da parte de autorização dos sistemas Ambev. </p>
+<p align="justify"> Boiler plate para ser usado em projetos desenvolvidos em go</p>
 
 ## Para Começar
 
-Para podermos executar o projeto precisamos instalar alguns programas em nossa máquina para que tudo funcione perfeitamente.
+Para executar o projeto precisamos instalar alguns programas em nossa máquina para que tudo funcione perfeitamente.
 
 - **Visual Studio Code(vscode)** é um editor de código-fonte desenvolvido pela Microsoft que você poderá usar para editar e subir seu código. [Download Visual Studio Code](https://code.visualstudio.com/download)
 
@@ -26,13 +26,11 @@ As mesmas variáveis também se encontram configuradas no docker-compose do proj
 
 #### Executar toda aplicação localmente
 
-Para isso é necessário ter o postgres rodando localmente na porta 5432 (default).
-
 Inicialmente precisamos clonar o projeto da seguinte maneira:
 
 `1. git clone https://github.com/vhpribeiro/controle_acesso_core.git`
 
-`2. cd controle_acesso_core`
+`2. cd boiler_plate_go`
 
 `3. cd src`
 

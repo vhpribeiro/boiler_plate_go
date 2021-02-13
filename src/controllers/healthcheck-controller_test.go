@@ -10,11 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestShouldGetSuccessWhenTryHealthCheck(t *testing.T) {
+func TestShouldGetSuccessWhenGetHealthCheck(t *testing.T) {
 	//Arrange
 	var result string
-	url := "/healthcheck"
-	mensagemEsperada := "Aplicação disponível"
+	url := "/health"
+	mensagemEsperada := "Ok"
 	e := echo.New()
 	req, _ := http.NewRequest(http.MethodGet, url, nil)
 	rec := httptest.NewRecorder()

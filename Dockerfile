@@ -9,7 +9,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflag
 
 FROM alpine
 WORKDIR /app
-COPY src/configuration/casbin/casbin_rbac_with_domains_model.conf /app
 COPY --from=builder /go/src/bin/application /app/
 EXPOSE 8000
 ENTRYPOINT ./application

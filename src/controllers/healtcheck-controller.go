@@ -13,7 +13,7 @@ type IHealthCheckController interface {
 type healthCheckController struct{}
 
 func (*healthCheckController) GetHealthCheck(context echo.Context) error {
-	return context.JSON(http.StatusOK, "Aplicação disponível")
+	return context.JSON(http.StatusOK, "Ok")
 }
 
 func NewHealtCheckController() IHealthCheckController {

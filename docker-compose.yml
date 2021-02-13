@@ -1,6 +1,6 @@
 version: "3"
 services:
-  controle_de_acesso_core:
+  boiler_plate:
     build:
       context: .
     ports:
@@ -8,10 +8,9 @@ services:
     environment:
       - PORT=8000
       - CONNECTION_STRING=postgresql://postgres:admin@host.docker.internal:5432/database?sslmode=disable
-      - PATH_CONFIG=./casbin_rbac_with_domains_model.conf
-    hostname: controle_de_acesso_core
+    hostname: boiler_plate
     networks:
-      - controle_acesso
+      - boiler_plate
     depends_on:
       - postgres-container
 
@@ -26,7 +25,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - controle_acesso
+      - boiler_plate
     restart: unless-stopped
 
   pgadmin_container:
@@ -39,11 +38,11 @@ services:
     ports:
       - "${PGADMIN_PORT:-5050}:80"
     networks:
-      - controle_acesso
+      - boiler_plate
     restart: unless-stopped
 
 networks:
-  controle_acesso:
+  boiler_plate:
     driver: bridge
 
 volumes:
