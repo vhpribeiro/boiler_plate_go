@@ -5,6 +5,7 @@ import (
 
 	"boiler_plate.com/src/configuration/environments"
 	"boiler_plate.com/src/controllers"
+	"boiler_plate.com/src/middlewares"
 	"boiler_plate.com/src/utils"
 
 	"github.com/labstack/echo/v4"
@@ -34,6 +35,10 @@ func (handler *apiHandler) Start() error {
 
 	login := api.Group("/login")
 	login.POST("", handler.login.Login)
+
+	//Todas rotas daqui para baixo são restritas
+	handler.echo.Use(middlewares.IsLoggedIn())
+	login.GET("/restricted", handler.login.RestrictedAccess)
 
 	return handler.echo.Start(fmt.Sprintf("%s:%s", "0.0.0.0", env.Port))
 }
