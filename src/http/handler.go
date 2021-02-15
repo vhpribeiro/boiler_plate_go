@@ -35,10 +35,7 @@ func (handler *apiHandler) Start() error {
 
 	login := api.Group("/login")
 	login.POST("", handler.login.Login)
-
-	//Todas rotas daqui para baixo são restritas
-	handler.echo.Use(middlewares.IsLoggedIn())
-	login.GET("/restricted", handler.login.RestrictedAccess)
+	login.GET("/restricted", handler.login.RestrictedAccess, middlewares.IsLoggedIn())
 
 	return handler.echo.Start(fmt.Sprintf("%s:%s", "0.0.0.0", env.Port))
 }
