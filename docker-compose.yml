@@ -1,20 +1,20 @@
 version: "3"
 services:
-  boiler_plate:
-    build:
-      context: .
-    ports:
-      - "8000:8000"
-    environment:
-      - PORT=8000
-      - CONNECTION_STRING=postgresql://postgres:admin@host.docker.internal:5432/database?sslmode=disable
-    hostname: boiler_plate
-    networks:
-      - boiler_plate
-    depends_on:
-      - postgres-container
+  # boiler_plate:
+  #   build:
+  #     context: .
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - PORT=8000
+  #     - CONNECTION_STRING=postgresql://postgres:admin@host.docker.internal:5432/database?sslmode=disable
+  #   hostname: boiler_plate
+  #   networks:
+  #     - boiler_plate
+  #   depends_on:
+  #     - postgres
 
-  postgres-container:
+  postgres:
     image: postgres
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-postgres}

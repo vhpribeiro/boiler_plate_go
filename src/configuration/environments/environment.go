@@ -12,9 +12,13 @@ var (
 )
 
 type Environment struct {
-	Port             string `cfg:"PORT" cfgDefault:"8000"`
-	ConnectionString string `cfg:"CONNECTION_STRING" cfgDefault:"postgresql://postgres:admin@localhost:5432/database?sslmode=disable"`
-	ServiceName      string `cfg:"SERVICE_NAME" cfgDefault:"boiler_plate"`
+	Port                 string `cfg:"PORT" cfgDefault:"8000"`
+	PostgresHost         string `cfg:"POSTGRES_HOST" cfgDefault:"localhost"`
+	PostgresPort         string `cfg:"POSTGRES_PORT" cfgDefault:"5432"`
+	PostgresUser         string `cfg:"POSTGRES_USER" cfgDefault:"postgres"`
+	PostgresPassword     string `cfg:"POSTGRES_PASSWORD" cfgDefault:"admin"`
+	PostgresDatabaseName string `cfg:"POSTGRES_DATABASE_NAME" cfgDefault:"postgres_users"`
+	ServiceName          string `cfg:"SERVICE_NAME" cfgDefault:"boiler_plate"`
 }
 
 func GetEnvironment() Environment {

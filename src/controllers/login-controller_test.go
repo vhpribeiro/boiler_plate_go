@@ -7,7 +7,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"boiler_plate.com/src/services"
 	"boiler_plate.com/src/services/dtos"
 	"boiler_plate.com/src/utils/errors"
 	"github.com/labstack/echo/v4"
@@ -90,42 +89,4 @@ func TestShouldGetInternalServerErrorWhenGetLogin(t *testing.T) {
 	_ = json.Unmarshal(rec.Body.Bytes(), &result)
 	assert.Equal(t, http.StatusInternalServerError, rec.Code)
 	assert.Equal(t, expectedResult, result)
-}
-
-func TestShouldAccessRestrictedArea(t *testing.T) {
-	var result string
-	expectedResult := "You can pass young jon!"
-	mockLoginService := new(MockLoginSerevice)
-	loginController := NewLoginController(mockLoginService)
-	token := getTheToken()
-	bearer := "Bearer " + token
-	url := "/login/restricted"
-	e := echo.New()
-	req, _ := http.NewRequest(http.MethodGet, url, nil)
-	req.Header.Set("Authorization", bearer)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-
-	loginController.RestrictedAccess(c)
-
-	_ = json.Unmarshal(rec.Body.Bytes(), &result)
-	assert.Equal(t, http.StatusInternalServerError, rec.Code)
-	assert.Equal(t, expectedResult, result)
-}
-
-func getTheToken() string {
-	var result map[string]string
-	url := "/login"
-	e := echo.New()
-	requestBody := `{"username": "jon", "password": "password"}`
-	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBufferString(requestBody))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	loginService := services.NewLoginService()
-	loginController := NewLoginController(loginService)
-
-	loginController.Login(c)
-	_ = json.Unmarshal(rec.Body.Bytes(), &result)
-	return result["token"]
 }
