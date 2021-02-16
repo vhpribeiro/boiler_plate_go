@@ -27,7 +27,7 @@ func (l *loginService) Login(loginDto dtos.LoginDto) (map[string]string, error) 
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["name"] = "Jon Doe"
+	claims["name"] = user.Username
 	claims["admin"] = true
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 
