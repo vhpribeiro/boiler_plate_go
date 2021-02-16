@@ -17,12 +17,14 @@ func main() {
 
 	//Instanciar os serviços
 	loginService := services.NewLoginService(userRepository)
+	userService := services.NewUserService(userRepository)
 
 	//Instanciar controllers
 	healthCheckController := controllers.NewHealtCheckController()
 	loginController := controllers.NewLoginController(loginService)
+	userController := controllers.NewUserController(userService)
 
-	handler := http_adapter.NewHandler(healthCheckController, loginController)
+	handler := http_adapter.NewHandler(healthCheckController, loginController, userController)
 
 	err = handler.Start()
 	if err != nil {

@@ -23,6 +23,12 @@ func (m *MockUserRepository) GetUser(username, password string) models.User {
 	return result.(models.User)
 }
 
+func (m *MockUserRepository) CreateUser(username, password string) models.User {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(models.User)
+}
+
 func TestShouldGetErrorWhenTryLoginAndUserWasNotFound(t *testing.T) {
 	expectedError := &errors.InternalError{Message: "User not found!"}
 	loginDto := dtos.LoginDto{Username: ""}

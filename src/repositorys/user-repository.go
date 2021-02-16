@@ -11,6 +11,7 @@ import (
 
 type IUserRepository interface {
 	GetUser(username, password string) models.User
+	CreateUser(username, password string) models.User
 }
 
 type userRepository struct {
@@ -21,6 +22,15 @@ func (u *userRepository) GetUser(username, password string) models.User {
 	var user models.User
 
 	u.DbConnection.Where("username = ? AND password = ?", username, password).Find(&user)
+	u.DbConnection.Close()
+
+	return user
+}
+
+func (u *userRepository) CreateUser(username, password string) models.User {
+	user := models.User{Username: username, Password: password}
+
+	u.DbConnection.Create(&user)
 	u.DbConnection.Close()
 
 	return user
