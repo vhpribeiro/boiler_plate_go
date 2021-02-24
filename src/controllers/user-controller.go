@@ -6,6 +6,7 @@ import (
 	"boiler_plate.com/src/services"
 	"boiler_plate.com/src/services/dtos"
 	"boiler_plate.com/src/utils/errors"
+	"boiler_plate.com/src/utils/helpers"
 	"github.com/labstack/echo/v4"
 )
 
@@ -21,7 +22,11 @@ func (u *userController) CreateUser(c echo.Context) error {
 	var loginDto dtos.LoginDto
 	err := c.Bind(&loginDto)
 
-	if err != nil || loginDto.Username == "" || loginDto.Password == "" {
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, err.Error())
+	}
+
+	if helpers.IsEmptyOrWhiteSpace(loginDto.Username) || helpers.IsEmptyOrWhiteSpace(loginDto.Password) {
 		return c.JSON(http.StatusBadRequest, &errors.InvalidObjectError{})
 	}
 
