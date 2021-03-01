@@ -18,6 +18,8 @@ type Environment struct {
 	PostgresUser         string `cfg:"POSTGRES_USER" cfgDefault:"postgres"`
 	PostgresPassword     string `cfg:"POSTGRES_PASSWORD" cfgDefault:"admin"`
 	PostgresDatabaseName string `cfg:"POSTGRES_DATABASE_NAME" cfgDefault:"postgres_users"`
+	RedisHost            string `cfg:"REDIS_HOST" cfgDefault:"localhost"`
+	RedisPort            string `cfg:"REDIS_Port" cfgDefault:"6379"`
 	ServiceName          string `cfg:"SERVICE_NAME" cfgDefault:"boiler_plate"`
 }
 

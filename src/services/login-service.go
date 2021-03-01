@@ -14,14 +14,31 @@ type ILoginService interface {
 }
 
 type loginService struct {
-	userRepository repositorys.IUserRepository
+	userRepository  repositorys.IUserRepository
+	redisRepository repositorys.IRedisRepository
 }
 
 func (l *loginService) Login(loginDto dtos.LoginDto) (map[string]string, error) {
 
+	//Verificar se usuário ta no cache
+	// cachedUser, err := l.redisRepository.Get(loginDto.Username)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	//Se não tiver vai no banco, pega ele e já salva no cache
+	// if cachedUser != "" {
+
+	// }
+
 	user := l.userRepository.GetUser(loginDto.Username, loginDto.Password)
 	if user.ID == 0 {
 		return nil, &errors.InternalError{Message: "User not found!"}
+	}
+
+	err := l.redisRepository.Save(user.Username, user.Password)
+	if err != nil {
+		return nil, err
 	}
 
 	token := jwt.New(jwt.SigningMethodHS256)
@@ -40,11 +57,14 @@ func (l *loginService) Login(loginDto dtos.LoginDto) (map[string]string, error) 
 	mapResult := map[string]string{
 		"token": tokenGenerated,
 	}
+
 	return mapResult, nil
 }
 
-func NewLoginService(userRepository repositorys.IUserRepository) ILoginService {
+func NewLoginService(userRepository repositorys.IUserRepository,
+	redisRepository repositorys.IRedisRepository) ILoginService {
 	return &loginService{
-		userRepository: userRepository,
+		userRepository:  userRepository,
+		redisRepository: redisRepository,
 	}
 }

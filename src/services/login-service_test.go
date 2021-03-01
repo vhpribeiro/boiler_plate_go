@@ -17,6 +17,10 @@ type MockUserRepository struct {
 	mock.Mock
 }
 
+type MockRedisRepository struct {
+	mock.Mock
+}
+
 func (m *MockUserRepository) GetUser(username, password string) models.User {
 	args := m.Called()
 	result := args.Get(0)
@@ -29,6 +33,18 @@ func (m *MockUserRepository) CreateUser(username, password string) models.User {
 	return result.(models.User)
 }
 
+func (m *MockRedisRepository) Save(key, value string) error {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(error)
+}
+
+func (m *MockRedisRepository) Get(key string) (string, error) {
+	args := m.Called()
+	result := args.Get(0)
+	return result.(string), args.Error(1)
+}
+
 func TestShouldGetErrorWhenTryLoginAndUserWasNotFound(t *testing.T) {
 	expectedError := &errors.InternalError{Message: "User not found!"}
 	loginDto := dtos.LoginDto{Username: ""}
@@ -38,8 +54,9 @@ func TestShouldGetErrorWhenTryLoginAndUserWasNotFound(t *testing.T) {
 		Password: "",
 	}
 	mockUserRepository := new(MockUserRepository)
+	mockRedisRepository := new(MockRedisRepository)
 	mockUserRepository.On("GetUser").Return(invalidUser)
-	loginService := NewLoginService(mockUserRepository)
+	loginService := NewLoginService(mockUserRepository, mockRedisRepository)
 
 	_, resultError := loginService.Login(loginDto)
 
@@ -60,8 +77,9 @@ func TestShouldGetTheTokenWhenDoLogin(t *testing.T) {
 		"token": tokenGenerated,
 	}
 	mockUserRepository := new(MockUserRepository)
+	mockRedisRepository := new(MockRedisRepository)
 	mockUserRepository.On("GetUser").Return(validUser)
-	loginService := NewLoginService(mockUserRepository)
+	loginService := NewLoginService(mockUserRepository, mockRedisRepository)
 
 	result, _ := loginService.Login(loginDto)
 

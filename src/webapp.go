@@ -14,9 +14,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	redisRepository := repositorys.NewRedisRepository()
 
 	//Instanciar os serviços
-	loginService := services.NewLoginService(userRepository)
+	loginService := services.NewLoginService(userRepository, redisRepository)
 	userService := services.NewUserService(userRepository)
 
 	//Instanciar controllers
