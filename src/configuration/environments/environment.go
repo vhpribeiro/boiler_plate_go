@@ -28,7 +28,6 @@ func GetEnvironment() Environment {
 		env = Environment{}
 		err := goconfig.Parse(&env)
 		if err != nil {
-			println(err)
 			return
 		}
 	})

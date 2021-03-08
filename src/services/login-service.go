@@ -20,16 +20,15 @@ type loginService struct {
 
 func (l *loginService) Login(loginDto dtos.LoginDto) (map[string]string, error) {
 
-	//Verificar se usuário ta no cache
-	// cachedUser, err := l.redisRepository.Get(loginDto.Username)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	cachedUser, _ := l.redisRepository.Get(loginDto.Username)
 
-	//Se não tiver vai no banco, pega ele e já salva no cache
-	// if cachedUser != "" {
-
-	// }
+	if cachedUser != "" {
+		result, err := createToken(loginDto.Username)
+		if err != nil {
+			return nil, err
+		}
+		return result, nil
+	}
 
 	user := l.userRepository.GetUser(loginDto.Username, loginDto.Password)
 	if user.ID == 0 {
@@ -41,10 +40,19 @@ func (l *loginService) Login(loginDto dtos.LoginDto) (map[string]string, error) 
 		return nil, err
 	}
 
+	result, err := createToken(user.Username)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func createToken(username string) (map[string]string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["name"] = user.Username
+	claims["name"] = username
 	claims["admin"] = true
 	claims["exp"] = time.Now().Add(time.Hour * 72).Unix()
 

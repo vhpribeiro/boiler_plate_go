@@ -26,58 +26,39 @@ func (m *MockUserService) CreateUser(loginDto dtos.LoginDto) dtos.UserDto {
 	return result.(dtos.UserDto)
 }
 
-func TestShouldGetBadRequestWhenUsernameIsInvalid(t *testing.T) {
+func TestShouldGetBadRequestWhenPassInvalidObjectInput(t *testing.T) {
 	var result errors.InvalidObjectError
 	expectedResult := errors.InvalidObjectError{}
-	url := "/login"
-	e := echo.New()
-	invalidUsername := ""
-	requestBody := fmt.Sprintf("{\"username\": %s, \"password\": \"password\"}", invalidUsername)
-	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBufferString(requestBody))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	mockUserService := new(MockUserService)
-	userController := NewUserController(mockUserService)
+	testCases := []struct {
+		username string
+		password string
+	}{
+		{"", "12345648"},
+		{"       ", "12345648"},
+		{"jon", ""},
+		{"jon", "     "},
+	}
+	for _, tc := range testCases {
+		t.Run("test invalid object", func(t *testing.T) {
+			requestBody := createRequestBody(tc.username, tc.password)
+			c, rec := createContextAndRecorder(requestBody)
+			mockUserService := new(MockUserService)
+			userController := NewUserController(mockUserService)
 
-	userController.CreateUser(c)
+			userController.CreateUser(c)
 
-	_ = json.Unmarshal(rec.Body.Bytes(), &result)
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Equal(t, expectedResult, result)
-}
-
-func TestShouldGetBadRequestWhenPasswordIsInvalid(t *testing.T) {
-	var result errors.InvalidObjectError
-	expectedResult := errors.InvalidObjectError{}
-	url := "/login"
-	e := echo.New()
-	invalidPassword := ""
-	requestBody := fmt.Sprintf("{\"username\": \"jon\", \"password\": %s}", invalidPassword)
-	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBufferString(requestBody))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
-	mockUserService := new(MockUserService)
-	userController := NewUserController(mockUserService)
-
-	userController.CreateUser(c)
-
-	_ = json.Unmarshal(rec.Body.Bytes(), &result)
-	assert.Equal(t, http.StatusBadRequest, rec.Code)
-	assert.Equal(t, expectedResult, result)
+			_ = json.Unmarshal(rec.Body.Bytes(), &result)
+			assert.Equal(t, http.StatusBadRequest, rec.Code)
+			assert.Equal(t, expectedResult, result)
+		})
+	}
 }
 
 func TestShouldGetBadRequestWhenBodyRequestIsInvalid(t *testing.T) {
 	var result errors.InvalidObjectError
 	expectedResult := errors.InvalidObjectError{}
-	url := "/login"
-	e := echo.New()
 	requestBody := `{"TESTE": "teste_falho"`
-	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBufferString(requestBody))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	c, rec := createContextAndRecorder(requestBody)
 	mockUserService := new(MockUserService)
 	userController := NewUserController(mockUserService)
 
@@ -104,13 +85,8 @@ func TestShoulGetTheCreatedUser(t *testing.T) {
 		Username: username,
 		Password: password,
 	}
-	url := "/login"
-	e := echo.New()
 	requestBody := fmt.Sprintf("{\"username\": \"%s\", \"password\": \"%s\"}", username, password)
-	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBufferString(requestBody))
-	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
-	rec := httptest.NewRecorder()
-	c := e.NewContext(req, rec)
+	c, rec := createContextAndRecorder(requestBody)
 	mockUserService := new(MockUserService)
 	mockUserService.On("CreateUser", loginDto).Return(expectedResult)
 	userController := NewUserController(mockUserService)
@@ -120,4 +96,19 @@ func TestShoulGetTheCreatedUser(t *testing.T) {
 	_ = json.Unmarshal(rec.Body.Bytes(), &result)
 	assert.Equal(t, http.StatusCreated, rec.Code)
 	assert.Equal(t, expectedResult, result)
+}
+
+func createRequestBody(username, password string) string {
+	return fmt.Sprintf("{\"username\": \"%s\", \"password\": \"%s\"}", username, password)
+}
+
+func createContextAndRecorder(requestBody string) (echo.Context, *httptest.ResponseRecorder) {
+	url := "/login"
+	e := echo.New()
+	req, _ := http.NewRequest(http.MethodPost, url, bytes.NewBufferString(requestBody))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := e.NewContext(req, rec)
+
+	return c, rec
 }

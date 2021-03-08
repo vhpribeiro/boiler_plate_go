@@ -5,7 +5,6 @@ import (
 
 	"boiler_plate.com/src/configuration/environments"
 	"boiler_plate.com/src/controllers"
-	"boiler_plate.com/src/middlewares"
 	"boiler_plate.com/src/utils"
 
 	"github.com/labstack/echo/v4"
@@ -36,7 +35,6 @@ func (handler *apiHandler) Start() error {
 
 	login := api.Group("/login")
 	login.POST("", handler.login.Login)
-	login.GET("/restricted", handler.login.RestrictedAccess, middlewares.IsLoggedIn())
 
 	user := api.Group("/users")
 	user.POST("", handler.user.CreateUser)
