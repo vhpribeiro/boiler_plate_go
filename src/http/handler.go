@@ -18,6 +18,8 @@ type IHandler interface {
 type apiHandler struct {
 	echo        *echo.Echo
 	healthCheck controllers.IHealthCheckController
+	login       controllers.ILoginController
+	user        controllers.IUserController
 	envLoader   utils.IEnvLoader
 }
 
@@ -31,14 +33,23 @@ func (handler *apiHandler) Start() error {
 	healthCheck := api.Group("/health")
 	healthCheck.GET("", handler.healthCheck.GetHealthCheck)
 
+	login := api.Group("/login")
+	login.POST("", handler.login.Login)
+
+	user := api.Group("/users")
+	user.POST("", handler.user.CreateUser)
+
 	return handler.echo.Start(fmt.Sprintf("%s:%s", "0.0.0.0", env.Port))
 }
 
-func NewHandler(
-	healthCheckController controllers.IHealthCheckController) IHandler {
+func NewHandler(healthCheckController controllers.IHealthCheckController,
+	loginController controllers.ILoginController,
+	userController controllers.IUserController) IHandler {
 	e := echo.New()
 	return &apiHandler{
 		echo:        e,
 		healthCheck: healthCheckController,
+		login:       loginController,
+		user:        userController,
 	}
 }
