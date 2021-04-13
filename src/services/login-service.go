@@ -3,9 +3,9 @@ package services
 import (
 	"time"
 
-	"boiler_plate.com/src/repositorys"
+	"boiler_plate.com/src/errors"
 	"boiler_plate.com/src/services/dtos"
-	"boiler_plate.com/src/utils/errors"
+	"boiler_plate.com/src/storages"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -14,8 +14,8 @@ type ILoginService interface {
 }
 
 type loginService struct {
-	userRepository  repositorys.IUserRepository
-	redisRepository repositorys.IRedisRepository
+	userRepository  storages.IUserRepository
+	redisRepository storages.IRedisRepository
 }
 
 func (l *loginService) Login(loginDto dtos.LoginDto) (map[string]string, error) {
@@ -69,8 +69,8 @@ func createToken(username string) (map[string]string, error) {
 	return mapResult, nil
 }
 
-func NewLoginService(userRepository repositorys.IUserRepository,
-	redisRepository repositorys.IRedisRepository) ILoginService {
+func NewLoginService(userRepository storages.IUserRepository,
+	redisRepository storages.IRedisRepository) ILoginService {
 	return &loginService{
 		userRepository:  userRepository,
 		redisRepository: redisRepository,

@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
+	"boiler_plate.com/src/errors"
 	"boiler_plate.com/src/models"
 	"boiler_plate.com/src/services/dtos"
-	"boiler_plate.com/src/utils/errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"

@@ -3,10 +3,10 @@ package controllers
 import (
 	"net/http"
 
+	"boiler_plate.com/src/errors"
+	"boiler_plate.com/src/helpers"
 	"boiler_plate.com/src/services"
 	"boiler_plate.com/src/services/dtos"
-	"boiler_plate.com/src/utils/errors"
-	"boiler_plate.com/src/utils/helpers"
 	"github.com/labstack/echo/v4"
 )
 

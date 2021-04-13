@@ -5,7 +5,6 @@ import (
 
 	"boiler_plate.com/src/configuration/environments"
 	"boiler_plate.com/src/controllers"
-	"boiler_plate.com/src/utils"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -20,7 +19,6 @@ type apiHandler struct {
 	healthCheck controllers.IHealthCheckController
 	login       controllers.ILoginController
 	user        controllers.IUserController
-	envLoader   utils.IEnvLoader
 }
 
 func (handler *apiHandler) Start() error {

@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
+	"boiler_plate.com/src/errors"
 	"boiler_plate.com/src/services/dtos"
-	"boiler_plate.com/src/utils/errors"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"

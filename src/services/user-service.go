@@ -1,8 +1,8 @@
 package services
 
 import (
-	"boiler_plate.com/src/repositorys"
 	"boiler_plate.com/src/services/dtos"
+	"boiler_plate.com/src/storages"
 )
 
 type IUserService interface {
@@ -10,7 +10,7 @@ type IUserService interface {
 }
 
 type userService struct {
-	userRepository repositorys.IUserRepository
+	userRepository storages.IUserRepository
 }
 
 func (u *userService) CreateUser(loginDto dtos.LoginDto) dtos.UserDto {
@@ -28,7 +28,7 @@ func (u *userService) CreateUser(loginDto dtos.LoginDto) dtos.UserDto {
 	return userDto
 }
 
-func NewUserService(userRepository repositorys.IUserRepository) IUserService {
+func NewUserService(userRepository storages.IUserRepository) IUserService {
 	return &userService{
 		userRepository: userRepository,
 	}

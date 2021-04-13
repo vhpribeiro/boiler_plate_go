@@ -3,9 +3,9 @@ package controllers
 import (
 	"net/http"
 
+	"boiler_plate.com/src/errors"
 	"boiler_plate.com/src/services"
 	"boiler_plate.com/src/services/dtos"
-	"boiler_plate.com/src/utils/errors"
 	"github.com/labstack/echo/v4"
 )
 
