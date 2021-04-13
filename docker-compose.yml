@@ -60,6 +60,14 @@ services:
     ports:
     - "8081:8081"
     restart: always
+  
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - 'rabbitmq_data:/data'
 
 networks:
   boiler_plate:
@@ -68,3 +76,4 @@ networks:
 volumes:
   postgres:
   pgadmin:
+  rabbitmq_data:
