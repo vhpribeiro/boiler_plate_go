@@ -21,6 +21,10 @@ type MockRedisRepository struct {
 	mock.Mock
 }
 
+type MockBrokerService struct {
+	mock.Mock
+}
+
 func (m *MockUserRepository) GetUser(username, password string) models.User {
 	args := m.Called(username, password)
 	result := args.Get(0)
@@ -44,6 +48,11 @@ func (m *MockRedisRepository) Get(key string) (string, error) {
 	return result.(string), args.Error(1)
 }
 
+func (m *MockBrokerService) SendMessageToBroker(queueName string) error {
+	args := m.Called(queueName)
+	return args.Error(0)
+}
+
 func TestShouldGetErrorWhenTryLoginAndUserWasNotFound(t *testing.T) {
 	expectedError := &errors.InternalError{Message: "User not found!"}
 	loginDto := dtos.LoginDto{
@@ -57,10 +66,11 @@ func TestShouldGetErrorWhenTryLoginAndUserWasNotFound(t *testing.T) {
 	}
 	userNotFoundInCache := ""
 	mockUserRepository := new(MockUserRepository)
-	mockRedisRepository := new(MockRedisRepository)
 	mockUserRepository.On("GetUser", loginDto.Username, loginDto.Password).Return(invalidUser)
+	mockRedisRepository := new(MockRedisRepository)
 	mockRedisRepository.On("Get", loginDto.Username).Return(userNotFoundInCache, nil)
-	loginService := NewLoginService(mockUserRepository, mockRedisRepository)
+	mockBrokerService := new(MockBrokerService)
+	loginService := NewLoginService(mockUserRepository, mockRedisRepository, mockBrokerService)
 
 	_, resultError := loginService.Login(loginDto)
 
@@ -79,11 +89,12 @@ func TestShouldGetErrorWhenTryLoginAndCanNotSaveInCacheRepository(t *testing.T) 
 	}
 	userNotFoundInCache := ""
 	mockUserRepository := new(MockUserRepository)
-	mockRedisRepository := new(MockRedisRepository)
 	mockUserRepository.On("GetUser", loginDto.Username, loginDto.Password).Return(validUser)
+	mockRedisRepository := new(MockRedisRepository)
 	mockRedisRepository.On("Get", loginDto.Username).Return(userNotFoundInCache, nil)
 	mockRedisRepository.On("Save", validUser.Username, validUser.Password).Return(expectedError)
-	loginService := NewLoginService(mockUserRepository, mockRedisRepository)
+	mockBrokerService := new(MockBrokerService)
+	loginService := NewLoginService(mockUserRepository, mockRedisRepository, mockBrokerService)
 
 	_, err := loginService.Login(loginDto)
 
@@ -101,11 +112,38 @@ func TestShouldGetTheTokenWhenDoLoginAndUserIsInCache(t *testing.T) {
 	mockUserRepository := new(MockUserRepository)
 	mockRedisRepository := new(MockRedisRepository)
 	mockRedisRepository.On("Get", loginDto.Username).Return(username, nil)
-	loginService := NewLoginService(mockUserRepository, mockRedisRepository)
+	mockBrokerService := new(MockBrokerService)
+	loginService := NewLoginService(mockUserRepository, mockRedisRepository, mockBrokerService)
 
 	result, _ := loginService.Login(loginDto)
 
 	assert.Equal(t, expectedResult, result)
+}
+
+func TestShouldGetErrorWhenDoLoginAndGetErrorFromBroker(t *testing.T) {
+	expectedError := &errors.InternalError{Message: "Can not save in cache repository!"}
+	username := "Vitor Ribeiro"
+	password := "123458678"
+	loginDto := dtos.LoginDto{Username: username, Password: password}
+	validUser := models.User{
+		Model:    gorm.Model{ID: 1},
+		Username: username,
+		Password: password,
+	}
+	queueName := "BoilerPlateQueue"
+	userNotFoundInCache := ""
+	mockUserRepository := new(MockUserRepository)
+	mockUserRepository.On("GetUser", loginDto.Username, loginDto.Password).Return(validUser)
+	mockRedisRepository := new(MockRedisRepository)
+	mockRedisRepository.On("Get", loginDto.Username).Return(userNotFoundInCache, nil)
+	mockRedisRepository.On("Save", validUser.Username, validUser.Password).Return(nil)
+	mockBrokerService := new(MockBrokerService)
+	mockBrokerService.On("SendMessageToBroker", queueName).Return(expectedError)
+	loginService := NewLoginService(mockUserRepository, mockRedisRepository, mockBrokerService)
+
+	_, err := loginService.Login(loginDto)
+
+	assert.Equal(t, expectedError, err)
 }
 
 func TestShouldGetTheTokenWhenDoLoginAndUserIsNotInCache(t *testing.T) {
@@ -121,13 +159,16 @@ func TestShouldGetTheTokenWhenDoLoginAndUserIsNotInCache(t *testing.T) {
 	expectedResult := map[string]string{
 		"token": tokenGenerated,
 	}
+	queueName := "BoilerPlateQueue"
 	userNotFoundInCache := ""
 	mockUserRepository := new(MockUserRepository)
-	mockRedisRepository := new(MockRedisRepository)
 	mockUserRepository.On("GetUser", loginDto.Username, loginDto.Password).Return(validUser)
+	mockRedisRepository := new(MockRedisRepository)
 	mockRedisRepository.On("Get", loginDto.Username).Return(userNotFoundInCache, nil)
 	mockRedisRepository.On("Save", validUser.Username, validUser.Password).Return(nil)
-	loginService := NewLoginService(mockUserRepository, mockRedisRepository)
+	mockBrokerService := new(MockBrokerService)
+	mockBrokerService.On("SendMessageToBroker", queueName).Return(nil)
+	loginService := NewLoginService(mockUserRepository, mockRedisRepository, mockBrokerService)
 
 	result, _ := loginService.Login(loginDto)
 

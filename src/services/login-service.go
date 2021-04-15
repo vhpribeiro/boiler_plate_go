@@ -16,6 +16,7 @@ type ILoginService interface {
 type loginService struct {
 	userRepository  storages.IUserRepository
 	redisRepository storages.IRedisRepository
+	brokerService   IBrokerService
 }
 
 func (l *loginService) Login(loginDto dtos.LoginDto) (map[string]string, error) {
@@ -45,6 +46,12 @@ func (l *loginService) Login(loginDto dtos.LoginDto) (map[string]string, error) 
 		return nil, err
 	}
 
+	queueName := "BoilerPlateQueue"
+	err = l.brokerService.SendMessageToBroker(queueName)
+	if err != nil {
+		return nil, err
+	}
+
 	return result, nil
 }
 
@@ -70,9 +77,10 @@ func createToken(username string) (map[string]string, error) {
 }
 
 func NewLoginService(userRepository storages.IUserRepository,
-	redisRepository storages.IRedisRepository) ILoginService {
+	redisRepository storages.IRedisRepository, brokerService IBrokerService) ILoginService {
 	return &loginService{
 		userRepository:  userRepository,
 		redisRepository: redisRepository,
+		brokerService:   brokerService,
 	}
 }

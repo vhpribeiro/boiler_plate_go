@@ -1,6 +1,7 @@
 package main
 
 import (
+	"boiler_plate.com/src/broker"
 	"boiler_plate.com/src/controllers"
 	http_adapter "boiler_plate.com/src/http"
 	"boiler_plate.com/src/services"
@@ -8,6 +9,9 @@ import (
 )
 
 func main() {
+
+	queueName := "BoilerPlateQueue"
+	ch := broker.CreateChannel(queueName)
 
 	//Instanciar os repositorys
 	userRepository, err := storages.NewUserRepository()
@@ -17,7 +21,8 @@ func main() {
 	redisRepository := storages.NewRedisRepository()
 
 	//Instanciar os serviços
-	loginService := services.NewLoginService(userRepository, redisRepository)
+	brokerService := services.NewBrokerService(ch)
+	loginService := services.NewLoginService(userRepository, redisRepository, brokerService)
 	userService := services.NewUserService(userRepository)
 
 	//Instanciar controllers
